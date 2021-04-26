@@ -69,7 +69,7 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, dt):
 #    fi_ref = math.atan2(dy, dx)   #можно вычислять вне цикла, для оптимизации?
     fi_ref = math.atan(dy/dx)
 
-    if dy < 0 and dx > 0:
+    if dy < 0 and dx < 0:
     	fi_ref = math.pi + fi_ref
 
     omega = -(fi_k - fi_ref) * coeff1
