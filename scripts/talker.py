@@ -61,9 +61,9 @@ def step(x_k, y_k, fi_k, dt, v, omega):
     fi_k = fi_k + omega * dt
     return x_k, y_k, fi_k
  
-def go_forward_one(velocity, x_k, y_k, fi_k):
-    x_k, y_k, fi_k = step(x_k, y_k, fi_k, dt, velocity, 0)
-    return x_k, y_k, fi_k
+#def go_forward_one(velocity, x_k, y_k, fi_k):
+#    x_k, y_k, fi_k = step(x_k, y_k, fi_k, dt, velocity, 0)
+#    return x_k, y_k, fi_k
     
  
 def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
@@ -78,8 +78,8 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
     omega = -(fi_k - fi_ref) * coeff
     
  
-    x_k_o = x_k
-    y_k_o = y_k
+    #x_k_o = x_k
+    #y_k_o = y_k
     
     x_k, y_k, fi_k = step(x_k, y_k, fi_k, dt, v, omega)
     
@@ -98,7 +98,8 @@ def talker():
  
     x_k, y_k, fi_k = init()
  
-    x_k_prev = x_k, y_k_prev = y_k
+    x_k_prev = x_k
+    y_k_prev = y_k
 
     v = 1
     omega = math.pi/2
@@ -129,7 +130,7 @@ def talker():
         fi_k_noise = fi_k + np.random.normal(0, 1.5*math.pi/180.0)
         
 
-        fi_k = fi_k_noise
+        #fi_k = fi_k_noise
 
         x_dot = (x_k - x_k_prev)/dt
         y_dot = (y_k - y_k_prev)/dt
@@ -138,6 +139,9 @@ def talker():
         dy_arr.append(y_dot)
         fi_ref_arr.append(math.atan2(x_dot, y_dot))
 
+
+        x_k_prev = x_k
+        y_k_prev = x_k
 
         #hello_str = "x_k = {} y_k = {} fi_k = {} dt = {} ".format(x_k, y_k, fi_k, dt)
         publish_str1 = "\nNO NOISE: {:.5f}".format(x_k) + ' ' + "{:.5f}".format(y_k) + ' ' + "{:.5f}".format(fi_k)
