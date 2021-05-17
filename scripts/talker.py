@@ -55,6 +55,7 @@ phi_noise_arr = []
 phi_noise_filtered_arr = []
 
 
+phi_filtered = []
  
 def init():
     x_k = 0
@@ -99,7 +100,7 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
     
  
 def talker():
-    global dx_arr, dy_arr, phi_xy_arr, phi_xy_filtered_arr, phi_noise_arr, phi_noise_filtered_arr
+    global dx_arr, dy_arr, phi_xy_arr, phi_xy_filtered_arr, phi_noise_arr, phi_noise_filtered_arr, phi_filtered
 
     T = 0.1
     eps = 5e-2
@@ -160,6 +161,10 @@ def talker():
         phi_noise_filtered_arr.append(phi_k_noise_filtered)
 
 
+        
+        phi_kf =  (phi_xy_filtered + phi_k_noise_filtered)/2.
+        phi_filtered.append(phi_kf)
+
 
         x_k_prev = x_k
         y_k_prev = y_k
@@ -205,4 +210,8 @@ if __name__ == '__main__':
 
     plt.plot(phi_noise_filtered_arr)
     plt.savefig('fi_noise_filtered.png')
+    plt.clf()
+
+    plt.plot(phi_filtered)
+    plt.savefig('fi_filtered_RESULT.png')
     plt.clf()
