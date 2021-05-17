@@ -48,8 +48,8 @@ y = []
 dx_arr = []
 dy_arr = []
 
-phi_course_arr = []
-phi_course_filtered_arr = []
+phi_xy_arr = []
+phi_xy_filtered_arr = []
 
 phi_noise_arr = []
 phi_noise_filtered_arr = []
@@ -99,7 +99,7 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
     
  
 def talker():
-    global dx_arr, dy_arr, phi_course_arr, phi_course_filtered_arr, phi_noise_arr, phi_noise_filtered_arr
+    global dx_arr, dy_arr, phi_xy_arr, phi_xy_filtered_arr, phi_noise_arr, phi_noise_filtered_arr
 
     
     pub = rospy.Publisher('omega_chatter', Float64, queue_size=10)
@@ -147,8 +147,8 @@ def talker():
         phi_xy = math.atan2(x_dot, y_dot)
         phi_xy_filtered = low_pass_filter(phi_xy, phi_xy_filtered_prev, 0.1, dt)
 
-        phi_course_arr.append(phi_xy)
-        phi_course_filtered_arr.append(phi_xy_filtered)
+        phi_xy_arr.append(phi_xy)
+        phi_xy_filtered_arr.append(phi_xy_filtered)
 
         x_k_prev = x_k
         y_k_prev = y_k
@@ -178,11 +178,11 @@ if __name__ == '__main__':
     plt.savefig('pos.png')
     plt.clf()
     
-    plt.plot(phi_course_arr)
+    plt.plot(phi_xy_arr)
     plt.savefig('fi_ref.png')
     plt.clf()
 
-    plt.plot(phi_course_filtered_arr)
+    plt.plot(phi_xy_filtered_arr)
     plt.savefig('fi_ref_filtered.png')
     plt.clf()
 
