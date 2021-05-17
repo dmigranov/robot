@@ -77,18 +77,11 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
     fi_ref = math.atan2(dx, dy)
     omega = -(fi_k - fi_ref) * coeff
     
- 
-    #x_k_o = x_k
-    #y_k_o = y_k
-    
     x_k, y_k, fi_k = step(x_k, y_k, fi_k, dt, v, omega)
-    
     
     x.append(x_k)
     y.append(y_k) 
     return x_k, y_k, fi_k, omega
-    
- 
     
  
 def talker():
@@ -103,11 +96,9 @@ def talker():
 
     v = 1
     omega = math.pi/2
- 
     
     x_ref = 3
-    y_ref = 3
-    
+    y_ref = 3 
    
     eps = 5e-2
  
@@ -117,18 +108,14 @@ def talker():
         end_time = rospy.get_time()
         dt = end_time - start_time
         start_time = end_time
-        
- 
-        #x_k, y_k, fi_k = step(x_k, y_k, fi_k, dt, v, omega)
-        
+                
         x_k, y_k, fi_k, omega = go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt)
         if abs(x_k - x_ref) < eps and abs(y_k - y_ref) < eps:
             v = 0
         
         x_k_noise  = x_k + np.random.normal(0, 0.003)
         y_k_noise  = y_k + np.random.normal(0, 0.003)
-        fi_k_noise = fi_k + np.random.normal(0, 1.5*math.pi/180.0)
-        
+        fi_k_noise = fi_k + np.random.normal(0, 1.5*math.pi/180.0)в
 
         #fi_k = fi_k_noise
 
@@ -143,7 +130,6 @@ def talker():
         x_k_prev = x_k
         y_k_prev = x_k
 
-        #hello_str = "x_k = {} y_k = {} fi_k = {} dt = {} ".format(x_k, y_k, fi_k, dt)
         publish_str1 = "\nNO NOISE: {:.5f}".format(x_k) + ' ' + "{:.5f}".format(y_k) + ' ' + "{:.5f}".format(fi_k)
         publish_str2 = "NOISE:    {:.5f}".format(x_k_noise) + ' ' + "{:.5f}".format(y_k_noise) + ' ' + "{:.5f}".format(fi_k_noise)
         publish_str = publish_str1 + '\n' + publish_str2
