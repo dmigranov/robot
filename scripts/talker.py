@@ -101,7 +101,14 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
 def talker():
     global dx_arr, dy_arr, phi_xy_arr, phi_xy_filtered_arr, phi_noise_arr, phi_noise_filtered_arr
 
-    
+    T = 0.1
+    eps = 5e-2
+    v = 1
+    omega = math.pi/2
+
+    x_ref = 3
+    y_ref = 3
+
     pub = rospy.Publisher('omega_chatter', Float64, queue_size=10)
     rospy.init_node('talker', anonymous=True)
     rate = rospy.Rate(100) # 10hz
@@ -111,15 +118,9 @@ def talker():
     x_k_prev = x_k
     y_k_prev = y_k
 
-    v = 1
-    omega = math.pi/2
-    
-    x_ref = 3
-    y_ref = 3
-
     phi_xy_filtered_prev = 0
-   
-    eps = 5e-2
+    phi_k_noise_prev = 0
+
  
     start_time = rospy.get_time()
  
@@ -147,13 +148,13 @@ def talker():
 
         # курсовой угол?
         phi_xy = math.atan2(x_dot, y_dot)
-        phi_xy_filtered = low_pass_filter(phi_xy, phi_xy_filtered_prev, 0.1, dt)
+        phi_xy_filtered = low_pass_filter(phi_xy, phi_xy_filtered_prev, T, dt)
 
         phi_xy_arr.append(phi_xy)
         phi_xy_filtered_arr.append(phi_xy_filtered)
 
 
-        phi_k_noise_filtered = high_pass_filter(, , , T, dt)
+        phi_k_noise_filtered = high_pass_filter(phi_k_noise_prev, phi_k_noise, phi_k_noise_filtered_prev, T, dt)
         phi_noise_arr.append(phi_k_noise)
 
 
