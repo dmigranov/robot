@@ -101,7 +101,6 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
 def talker():
     global dx_arr, dy_arr, fi_ref_arr, fi_ref_filtered_arr, fi_noise_arr, fi_noise_filtered_arr
 
-
     
     pub = rospy.Publisher('omega_chatter', Float64, queue_size=10)
     rospy.init_node('talker', anonymous=True)
@@ -136,6 +135,7 @@ def talker():
         x_k_noise  = x_k + np.random.normal(0, 0.003)
         y_k_noise  = y_k + np.random.normal(0, 0.003)
         fi_k_noise = fi_k + np.random.normal(0, 1.5*math.pi/180.0)
+        fi_noise_arr.append(fi_k_noise)
 
         #fi_k = fi_k_noise
 
@@ -184,3 +184,8 @@ if __name__ == '__main__':
 
     plt.plot(fi_ref_filtered_arr)
     plt.savefig('fi_ref_filtered.png')
+    plt.clf()
+
+    plt.plot(fi_noise_arr)
+    plt.savefig('fi_noise.png')
+    plt.clf()
