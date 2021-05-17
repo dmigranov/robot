@@ -135,9 +135,14 @@ def talker():
         fi_k = fi_k_noise
 
         #hello_str = "x_k = {} y_k = {} fi_k = {} dt = {} ".format(x_k, y_k, fi_k, dt)
-        publish_str = "{:.5f}".format(x_k) + ' ' + "{:.5f}".format(y_k) + ' ' + "{:.5f}".format(fi_k)
-        rospy.loginfo(publish_str)
-        pub.publish(publish_str)
+        publish_str1 = "{:.5f}".format(x_k) + ' ' + "{:.5f}".format(y_k) + ' ' + "{:.5f}".format(fi_k)
+        publish_str2 = "{:.5f}".format(x_k_noise) + ' ' + "{:.5f}".format(y_k_noise) + ' ' + "{:.5f}".format(fi_k_noise)
+
+        rospy.loginfo(publish_str1)
+        rospy.loginfo(publish_str2)
+        pub.publish(publish_str1)
+        pub.publish(publish_str2)
+
         rate.sleep()
  
  
