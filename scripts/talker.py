@@ -128,20 +128,16 @@ def talker():
         if abs(x_k - x_ref) < eps and abs(y_k - y_ref) < eps:
             v = 0
         
-        x_k_n  = x_k + np.random.normal(0, 0.003)
-        y_k_n  = y_k + np.random.normal(0, 0.003)
+        x_k_noise  = x_k + np.random.normal(0, 0.003)
+        y_k_noise  = y_k + np.random.normal(0, 0.003)
+        fi_k_noise = fi_k + np.random.normal(0, 1.5*math.pi/180.0)
         
- 
-        
-        
-        #x_k = x_k_n
-        #y_k = y_k_n
-        fi_k = fi_k + np.random.normal(0, 1.5*math.pi/180.0)
-        
+        fi_k = fi_k_noise
+
         #hello_str = "x_k = {} y_k = {} fi_k = {} dt = {} ".format(x_k, y_k, fi_k, dt)
-        omega_str = "{:.5f}".format(omega) + ' ' + str(v)
-        rospy.loginfo(str(omega))
-        pub.publish(omega)
+        publish_str = "{:.5f}".format(x_k) + ' ' + "{:.5f}".format(y_k) + ' ' + "{:.5f}".format(fi_k)
+        rospy.loginfo(publish_str)
+        pub.publish(publish_str)
         rate.sleep()
  
  
