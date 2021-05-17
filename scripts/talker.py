@@ -98,6 +98,8 @@ def talker():
  
     x_k, y_k, fi_k = init()
  
+    x_k_prev = x_k, y_k_prev = y_k
+
     v = 1
     omega = math.pi/2
  
