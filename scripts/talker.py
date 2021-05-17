@@ -107,7 +107,7 @@ def talker():
     rate = rospy.Rate(100) # 10hz
  
     x_k, y_k, phi_k = init()
- 
+
     x_k_prev = x_k
     y_k_prev = y_k
 
@@ -136,13 +136,16 @@ def talker():
         y_k_noise  = y_k + np.random.normal(0, 0.003)
         phi_k_noise = phi_k + np.random.normal(0, 1.5*math.pi/180.0)
 
-        #fi_k = fi_k_noise
+        #phi_k = phi_k_noise
 
+        # производные
         x_dot = (x_k - x_k_prev)/dt
         y_dot = (y_k - y_k_prev)/dt
-    
         dx_arr.append(x_dot)
         dy_arr.append(y_dot)
+
+
+        # курсовой угол?
         phi_xy = math.atan2(x_dot, y_dot)
         phi_xy_filtered = low_pass_filter(phi_xy, phi_xy_filtered_prev, 0.1, dt)
 
@@ -150,7 +153,7 @@ def talker():
         phi_xy_filtered_arr.append(phi_xy_filtered)
 
 
-        phi_k_noise_filtered = 0
+        phi_k_noise_filtered = high_pass_filter(, , , T, dt)
         phi_noise_arr.append(phi_k_noise)
 
 
