@@ -151,7 +151,7 @@ def talker():
         fi_course_filtered_arr.append(phi_xy_filtered)
 
         x_k_prev = x_k
-        y_k_prev = x_k
+        y_k_prev = y_k
         phi_xy_filtered_prev = phi_xy_filtered
 
         publish_str1 = "\nNO NOISE: {:.5f}".format(x_k) + ' ' + "{:.5f}".format(y_k) + ' ' + "{:.5f}".format(fi_k)
