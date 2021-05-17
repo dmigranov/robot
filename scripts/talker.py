@@ -60,6 +60,14 @@ def step(x_k, y_k, fi_k, dt, v, omega):
     y_k = y_k + dt*v*math.cos(fi_k)
     fi_k = fi_k + omega * dt
     return x_k, y_k, fi_k
+
+def low_pass_filter(in_cur, out_prev, T, dt):
+    out_cur = (T*out_prev + dt * in_cur)/(T + dt)
+    return out_cur
+
+def high_pass_filter(in_cur, out_prev, T, dt):
+    out_cur = 0
+    return out_cur
  
 #def go_forward_one(velocity, x_k, y_k, fi_k):
 #    x_k, y_k, fi_k = step(x_k, y_k, fi_k, dt, velocity, 0)
@@ -115,7 +123,7 @@ def talker():
         
         x_k_noise  = x_k + np.random.normal(0, 0.003)
         y_k_noise  = y_k + np.random.normal(0, 0.003)
-        fi_k_noise = fi_k + np.random.normal(0, 1.5*math.pi/180.0)в
+        fi_k_noise = fi_k + np.random.normal(0, 1.5*math.pi/180.0)
 
         #fi_k = fi_k_noise
 
