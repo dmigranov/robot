@@ -48,6 +48,8 @@ y = []
 dx_arr = []
 dy_arr = []
 fi_ref_arr = []
+fi_ref_filtered_arr = []
+
  
 def init():
     x_k = 0
@@ -76,7 +78,6 @@ def high_pass_filter(in_cur, out_prev, T, dt):
  
 def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
     global x,y
-    global dx_arr, dy_arr, fi_ref_arr
  
     coeff = 1
     
@@ -93,6 +94,9 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
     
  
 def talker():
+    global dx_arr, dy_arr, fi_ref_arr, fi_ref_filtered_arr
+
+    
     pub = rospy.Publisher('omega_chatter', Float64, queue_size=10)
     rospy.init_node('talker', anonymous=True)
     rate = rospy.Rate(100) # 10hz
@@ -138,11 +142,11 @@ def talker():
         phi_xy_filtered = low_pass_filter(phi_xy, phi_xy_filtered_prev, 0.1, dt)
 
         fi_ref_arr.append(phi_xy)
-
+        fi_ref_filtered_arr.append(phi_xy_filtered)
 
         x_k_prev = x_k
         y_k_prev = x_k
-        phi_xy_filtered = phi_xy_filtered
+        phi_xy_filtered_prev = phi_xy_filtered
 
         publish_str1 = "\nNO NOISE: {:.5f}".format(x_k) + ' ' + "{:.5f}".format(y_k) + ' ' + "{:.5f}".format(fi_k)
         publish_str2 = "NOISE:    {:.5f}".format(x_k_noise) + ' ' + "{:.5f}".format(y_k_noise) + ' ' + "{:.5f}".format(fi_k_noise)
@@ -169,4 +173,8 @@ if __name__ == '__main__':
     plt.clf()
     
     plt.plot(fi_ref_arr)
-    plt.savefig('fi.png')
+    plt.savefig('fi_ref.png')
+    plt.clf()
+
+    plt.plot(fi_ref_filtered_arr)
+    plt.savefig('fi_ref_filtered.png')
