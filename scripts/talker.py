@@ -119,6 +119,9 @@ def talker():
     x_k_prev = x_k
     y_k_prev = y_k
 
+    x_k_noise_prev = x_k
+    y_k_noise_prev = y_k
+
     phi_xy_filtered_prev = phi_k
     phi_k_noise_prev = phi_k
     phi_k_noise_filtered_prev = phi_k
@@ -166,8 +169,11 @@ def talker():
         phi_filtered.append(phi_kf)
 
 
+        # previous states of variables
         x_k_prev = x_k
         y_k_prev = y_k
+        x_k_noise_prev = x_k_noise
+        y_k_noise_prev = y_k_noise
         phi_xy_filtered_prev = phi_xy_filtered
         phi_k_noise_prev = phi_k_noise
         phi_k_noise_filtered_prev = phi_k_noise_filtered
