@@ -142,16 +142,20 @@ def talker():
         y_k_noise  = y_k + np.random.normal(0, 0.003)
         phi_k_noise = phi_k + np.random.normal(0, 1.5*math.pi/180.0)
 
-        #phi_k = phi_k_noise
 
-        # производные
+        # Производные
         x_dot = (x_k - x_k_prev)/dt
         y_dot = (y_k - y_k_prev)/dt
+
+        # или производные надо брать от зашумленных переменных?
+        #x_dot = (x_k_noise - x_k_noise_prev)/dt
+        #y_dot = (y_k_noise - y_k_noise_prev)/dt
+
         dx_arr.append(x_dot)
         dy_arr.append(y_dot)
 
 
-        # курсовой угол?
+        # Курсовой угол?
         phi_xy = math.atan2(x_dot, y_dot)
         phi_xy_filtered = low_pass_filter(phi_xy, phi_xy_filtered_prev, T, dt)
 
@@ -159,12 +163,13 @@ def talker():
         phi_xy_filtered_arr.append(phi_xy_filtered)
 
 
+        # Фи с шумом:
         phi_k_noise_filtered = high_pass_filter(phi_k_noise_prev, phi_k_noise, phi_k_noise_filtered_prev, T, dt)
         phi_noise_arr.append(phi_k_noise)
         phi_noise_filtered_arr.append(phi_k_noise_filtered)
 
 
-        
+        # Результат - комплиментарный фильтр: 
         phi_kf =  (phi_xy_filtered + phi_k_noise_filtered)/2.
         phi_filtered.append(phi_kf)
 
