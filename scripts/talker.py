@@ -47,8 +47,13 @@ y = []
  
 dx_arr = []
 dy_arr = []
+
 fi_ref_arr = []
 fi_ref_filtered_arr = []
+
+fi_noise_arr = []
+fi_noise_filtered_arr = []
+
 
  
 def init():
@@ -94,7 +99,8 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
     
  
 def talker():
-    global dx_arr, dy_arr, fi_ref_arr, fi_ref_filtered_arr
+    global dx_arr, dy_arr, fi_ref_arr, fi_ref_filtered_arr, fi_noise_arr, fi_noise_filtered_arr
+
 
     
     pub = rospy.Publisher('omega_chatter', Float64, queue_size=10)
