@@ -106,7 +106,7 @@ def talker():
     rospy.init_node('talker', anonymous=True)
     rate = rospy.Rate(100) # 10hz
  
-    x_k, y_k, fi_k = init()
+    x_k, y_k, phi_k = init()
  
     x_k_prev = x_k
     y_k_prev = y_k
@@ -128,14 +128,13 @@ def talker():
         dt = end_time - start_time
         start_time = end_time
                 
-        x_k, y_k, fi_k, omega = go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt)
+        x_k, y_k, phi_k, omega = go_to_point(x_k, y_k, phi_k, x_ref, y_ref, v, dt)
         if abs(x_k - x_ref) < eps and abs(y_k - y_ref) < eps:
             v = 0
         
         x_k_noise  = x_k + np.random.normal(0, 0.003)
         y_k_noise  = y_k + np.random.normal(0, 0.003)
-        fi_k_noise = fi_k + np.random.normal(0, 1.5*math.pi/180.0)
-        phi_noise_arr.append(fi_k_noise)
+        phi_k_noise = phi_k + np.random.normal(0, 1.5*math.pi/180.0)
 
         #fi_k = fi_k_noise
 
@@ -150,12 +149,18 @@ def talker():
         phi_xy_arr.append(phi_xy)
         phi_xy_filtered_arr.append(phi_xy_filtered)
 
+
+        phi_k_noise_filtered = 0
+        phi_noise_arr.append(phi_k_noise)
+
+
+
         x_k_prev = x_k
         y_k_prev = y_k
         phi_xy_filtered_prev = phi_xy_filtered
 
-        publish_str1 = "\nNO NOISE: {:.5f}".format(x_k) + ' ' + "{:.5f}".format(y_k) + ' ' + "{:.5f}".format(fi_k)
-        publish_str2 = "NOISE:    {:.5f}".format(x_k_noise) + ' ' + "{:.5f}".format(y_k_noise) + ' ' + "{:.5f}".format(fi_k_noise)
+        publish_str1 = "\nNO NOISE: {:.5f}".format(x_k) + ' ' + "{:.5f}".format(y_k) + ' ' + "{:.5f}".format(phi_k)
+        publish_str2 = "NOISE:    {:.5f}".format(x_k_noise) + ' ' + "{:.5f}".format(y_k_noise) + ' ' + "{:.5f}".format(phi_k_noise)
         publish_str = publish_str1 + '\n' + publish_str2
         rospy.loginfo(publish_str)
         pub.publish(publish_str)
