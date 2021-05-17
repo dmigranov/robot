@@ -106,7 +106,9 @@ def talker():
     omega = math.pi/2
     
     x_ref = 3
-    y_ref = 3 
+    y_ref = 3
+
+    phi_xy_filtered_prev = 0
    
     eps = 5e-2
  
@@ -132,11 +134,15 @@ def talker():
     
         dx_arr.append(x_dot)
         dy_arr.append(y_dot)
-        fi_ref_arr.append(math.atan2(x_dot, y_dot))
+        phi_xy = math.atan2(x_dot, y_dot)
+        phi_xy_filtered = low_pass_filter(phi_xy, phi_xy_filtered_prev, 0.1, dt)
+
+        fi_ref_arr.append(phi_xy)
 
 
         x_k_prev = x_k
         y_k_prev = x_k
+        phi_xy_filtered = phi_xy_filtered
 
         publish_str1 = "\nNO NOISE: {:.5f}".format(x_k) + ' ' + "{:.5f}".format(y_k) + ' ' + "{:.5f}".format(fi_k)
         publish_str2 = "NOISE:    {:.5f}".format(x_k_noise) + ' ' + "{:.5f}".format(y_k_noise) + ' ' + "{:.5f}".format(fi_k_noise)
