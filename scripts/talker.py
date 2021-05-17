@@ -118,8 +118,9 @@ def talker():
     x_k_prev = x_k
     y_k_prev = y_k
 
-    phi_xy_filtered_prev = 0
-    phi_k_noise_prev = 0
+    phi_xy_filtered_prev = phi_k
+    phi_k_noise_prev = phi_k
+    phi_k_noise_filtered_prev = phi_k
 
  
     start_time = rospy.get_time()
@@ -156,12 +157,15 @@ def talker():
 
         phi_k_noise_filtered = high_pass_filter(phi_k_noise_prev, phi_k_noise, phi_k_noise_filtered_prev, T, dt)
         phi_noise_arr.append(phi_k_noise)
+        phi_noise_filtered_arr.append(phi_k_noise_filtered)
 
 
 
         x_k_prev = x_k
         y_k_prev = y_k
         phi_xy_filtered_prev = phi_xy_filtered
+        phi_k_noise_prev = phi_k_noise
+        phi_k_noise_filtered_prev = phi_k_noise_filtered
 
         publish_str1 = "\nNO NOISE: {:.5f}".format(x_k) + ' ' + "{:.5f}".format(y_k) + ' ' + "{:.5f}".format(phi_k)
         publish_str2 = "NOISE:    {:.5f}".format(x_k_noise) + ' ' + "{:.5f}".format(y_k_noise) + ' ' + "{:.5f}".format(phi_k_noise)
@@ -197,4 +201,8 @@ if __name__ == '__main__':
 
     plt.plot(phi_noise_arr)
     plt.savefig('fi_noise.png')
+    plt.clf()
+
+    plt.plot(phi_noise_filtered_arr)
+    plt.savefig('fi_noise_filtered.png')
     plt.clf()
