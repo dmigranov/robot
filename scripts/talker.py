@@ -48,6 +48,10 @@ y = []
 omega_arr = []
 phi_ref_arr = []
 
+v_l_arr = []
+v_r_arr = []
+
+
  
 def init():
     x_k = 0
@@ -82,9 +86,8 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
     
  
 def talker():
-    global dx_arr, dy_arr, phi_xy_arr, phi_xy_filtered_arr, phi_noise_arr, phi_noise_filtered_arr, phi_filtered
+    global v_l_arr, v_r_arr
 
-    T = 0.1
     eps = 1e-2
     v = 1
     omega = math.pi/2
@@ -147,7 +150,12 @@ def talker():
 
         v_r = 0.5 * (v / k1 + omega / k2)
         v_l = 0.5 * (v / k1 - omega / k2)
-        
+
+        v_l_arr.append(v_l)
+        v_r_arr.append(v_r)
+
+        # я понял в чём проблема с вращением! ведь мы должны вращаться 
+
         if v_r <= 0:
                 v_r = 0
         else:
@@ -185,3 +193,7 @@ if __name__ == '__main__':
     plt.savefig('fi_ref.png')
     plt.clf()
 
+    plt.plot(v_l_arr)
+    plt.plot(v_r_arr)
+    plt.savefig('v_lr.png')
+    plt.clf()
