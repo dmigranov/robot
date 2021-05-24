@@ -38,7 +38,6 @@
  
 import rospy
 import numpy as np
-from std_msgs.msg import Float64
 from std_msgs.msg import UInt16
 import math
 import matplotlib.pyplot as plt
@@ -46,12 +45,9 @@ import matplotlib.pyplot as plt
 x = []
 y = []
 
-phi_xy_arr = []
+omega_arr = []
+phi_ref_arr = []
 
-phi_noise_arr = []
-
-
-phi_filtered = []
  
 def init():
     x_k = 0
@@ -66,7 +62,7 @@ def step(x_k, y_k, fi_k, dt, v, omega):
     return x_k, y_k, fi_k
  
 def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
-    global x,y
+    global x,y, omega_arr, phi_ref_arr
  
     coeff = 1
     
@@ -79,6 +75,9 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
     
     x.append(x_k)
     y.append(y_k) 
+    phi_ref_arr.append(fi_ref)
+    omega_arr.append(omega)
+
     return x_k, y_k, fi_k, omega
     
  
@@ -128,6 +127,7 @@ def talker():
 
 #        publish_str2 = "\nNO NOISE: {:.5f}".format(x_k) + ' ' + "{:.5f}".format(y_k) + ' ' + "{:.5f}".format(phi_k)
 #        rospy.loginfo(publish_str2)
+
         if curPoint < len(points):
             if abs(omega) > eps:
                 v = 0
@@ -176,15 +176,12 @@ if __name__ == '__main__':
     plt.plot(x,y)
     plt.savefig('pos.png')
     plt.clf()
+
+    plt.plot(omega_arr)
+    plt.savefig('omega.png')
+    plt.clf()
     
-    plt.plot(phi_xy_arr)
+    plt.plot(phi_ref_arr)
     plt.savefig('fi_ref.png')
     plt.clf()
 
-    plt.plot(phi_noise_arr)
-    plt.savefig('fi_noise.png')
-    plt.clf()
-
-    plt.plot(phi_filtered)
-    plt.savefig('fi_filtered_RESULT.png')
-    plt.clf()
