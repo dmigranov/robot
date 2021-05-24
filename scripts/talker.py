@@ -121,17 +121,13 @@ def talker():
         end_time = rospy.get_time()
         dt = end_time - start_time
         start_time = end_time
-        if achieved_destination:
+
+        if achieved_destination: #конец
             left_wheel_pub.publish(0)
             right_wheel_pub.publish(0)
             break
+
         x_k, y_k, phi_k, omega = go_to_point(x_k, y_k, phi_k, x_ref, y_ref, v, dt)
-
-#        publish_str1 = "\n{:.5f}".format(omega) + ' ' + "{:.5f}".format(v) 
-#        rospy.loginfo(publish_str1)
-
-#        publish_str2 = "\nNO NOISE: {:.5f}".format(x_k) + ' ' + "{:.5f}".format(y_k) + ' ' + "{:.5f}".format(phi_k)
-#        rospy.loginfo(publish_str2)
 
         if curPoint < len(points):
             if abs(omega) > eps:
