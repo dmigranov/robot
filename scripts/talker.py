@@ -69,19 +69,6 @@ def step(x_k, y_k, fi_k, dt, v, omega):
     y_k = y_k + dt*v*math.cos(fi_k)
     fi_k = fi_k + omega * dt
     return x_k, y_k, fi_k
-
-def low_pass_filter(in_cur, out_prev, T, dt):
-    out_cur = (T*out_prev + dt * in_cur)/(T + dt)
-    return out_cur
-
-def high_pass_filter(in_prev, in_cur, out_prev, T, dt):
-    out_cur = T * (in_cur - in_prev + out_prev)/(T + dt)
-    return out_cur
- 
-#def go_forward_one(velocity, x_k, y_k, fi_k):
-#    x_k, y_k, fi_k = step(x_k, y_k, fi_k, dt, velocity, 0)
-#    return x_k, y_k, fi_k
-    
  
 def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
     global x,y
