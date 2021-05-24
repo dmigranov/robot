@@ -50,10 +50,8 @@ dx_arr = []
 dy_arr = []
 
 phi_xy_arr = []
-phi_xy_filtered_arr = []
 
 phi_noise_arr = []
-phi_noise_filtered_arr = []
 
 
 phi_filtered = []
@@ -251,16 +249,8 @@ if __name__ == '__main__':
     plt.savefig('fi_ref.png')
     plt.clf()
 
-    plt.plot(phi_xy_filtered_arr)
-    plt.savefig('fi_ref_filtered.png')
-    plt.clf()
-
     plt.plot(phi_noise_arr)
     plt.savefig('fi_noise.png')
-    plt.clf()
-
-    plt.plot(phi_noise_filtered_arr)
-    plt.savefig('fi_noise_filtered.png')
     plt.clf()
 
     plt.plot(phi_filtered)
