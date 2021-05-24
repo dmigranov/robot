@@ -149,8 +149,8 @@ def talker():
                 v = 1
 
         if abs(x_k - x_ref) < eps and abs(y_k - y_ref) < eps: #and not achieved_destination:
-            publish_str2 = "\nNO NOISE: {:.5f}".format(x_k) + ' ' + "{:.5f}".format(y_k) + ' ' + "{:.5f}".format(phi_k)
-            rospy.loginfo(publish_str2)
+            publish_str = "\n X: {:.5f}".format(x_k) + ' Y: ' + "{:.5f}".format(y_k) + ' Phi:' + "{:.5f}".format(phi_k)
+            rospy.loginfo(publish_str)
 
             curPoint+=1
             if curPoint == len(points):
@@ -188,39 +188,6 @@ def talker():
         else:
                 v_l = 1
 
-        '''
-        # Курсовой угол?
-        phi_xy = math.atan2(x_dot, y_dot)
-        phi_xy_filtered = low_pass_filter(phi_xy, phi_xy_filtered_prev, T, dt)
-
-        phi_xy_arr.append(phi_xy)
-        phi_xy_filtered_arr.append(phi_xy_filtered)
-
-
-        # Фи с шумом:
-        phi_k_noise_filtered = high_pass_filter(phi_k_noise_prev, phi_k_noise, phi_k_noise_filtered_prev, T, dt)
-        phi_noise_arr.append(phi_k_noise)
-        phi_noise_filtered_arr.append(phi_k_noise_filtered)
-
-
-        # Результат - комплиментарный фильтр: 
-        phi_kf =  (phi_xy_filtered + phi_k_noise_filtered)/2.
-        phi_filtered.append(phi_kf)
-
-
-        # previous states of variables
-        x_k_prev = x_k
-        y_k_prev = y_k
-        x_k_noise_prev = x_k_noise
-        y_k_noise_prev = y_k_noise
-        phi_xy_filtered_prev = phi_xy_filtered
-        phi_k_noise_prev = phi_k_noise
-        phi_k_noise_filtered_prev = phi_k_noise_filtered
-	'''
-        publish_str1 = "\nNO NOISE: {:.5f}".format(x_k) + ' ' + "{:.5f}".format(y_k) + ' ' + "{:.5f}".format(phi_k)
-        #publish_str2 = "NOISE:    {:.5f}".format(x_k_noise) + ' ' + "{:.5f}".format(y_k_noise) + ' ' + "{:.5f}".format(phi_k_noise)
-        #publish_str = publish_str1 + '\n' + publish_str2
-        
         
         publish_wheels = "{:d}".format(v_l) + ' ' + "{:d}".format(v_r)
         left_wheel_pub.publish(v_l)
