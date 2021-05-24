@@ -142,14 +142,9 @@ def talker():
         y_k_noise  = y_k + np.random.normal(0, 0.003)
         phi_k_noise = phi_k + np.random.normal(0, 1.5*math.pi/180.0)
 
-
-        # Производные
-        x_dot = (x_k - x_k_prev)/dt
-        y_dot = (y_k - y_k_prev)/dt
-
-        # или производные надо брать от зашумленных переменных?
-        #x_dot = (x_k_noise - x_k_noise_prev)/dt
-        #y_dot = (y_k_noise - y_k_noise_prev)/dt
+        # производные надо брать от зашумленных переменных?
+        x_dot = (x_k_noise - x_k_noise_prev)/dt
+        y_dot = (y_k_noise - y_k_noise_prev)/dt
 
         dx_arr.append(x_dot)
         dy_arr.append(y_dot)
