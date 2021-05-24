@@ -45,9 +45,6 @@ import matplotlib.pyplot as plt
  
 x = []
 y = []
- 
-dx_arr = []
-dy_arr = []
 
 phi_xy_arr = []
 
@@ -102,8 +99,6 @@ def talker():
     points = [(3, 3), (4, -2), (3, 3)]
     x_ref = points[curPoint][0]
     y_ref = points[curPoint][1]
-
-    pub = rospy.Publisher('omega_chatter', Float64, queue_size=10)
     
     left_wheel_pub = rospy.Publisher('vl', UInt16, queue_size=10)
     right_wheel_pub = rospy.Publisher('vr', UInt16, queue_size=10)
@@ -113,15 +108,6 @@ def talker():
  
     x_k, y_k, phi_k = init()
 
-    x_k_prev = x_k
-    y_k_prev = y_k
-
-    x_k_noise_prev = x_k
-    y_k_noise_prev = y_k
-
-    phi_xy_filtered_prev = phi_k
-    phi_k_noise_prev = phi_k
-    phi_k_noise_filtered_prev = phi_k
     achieved_destination = False
 
 
@@ -158,22 +144,6 @@ def talker():
             if not achieved_destination:
                 x_ref = points[curPoint][0]
                 y_ref = points[curPoint][1]
-        
-        x_k_noise  = x_k + np.random.normal(0, 0.003)
-        y_k_noise  = y_k + np.random.normal(0, 0.003)
-        phi_k_noise = phi_k + np.random.normal(0, 1.5*math.pi/180.0)
-
-
-        # Производные
-        #x_dot = (x_k - x_k_prev)/dt
-        #y_dot = (y_k - y_k_prev)/dt
-
-        # или производные надо брать от зашумленных переменных?
-        x_dot = (x_k_noise - x_k_noise_prev)/dt
-        y_dot = (y_k_noise - y_k_noise_prev)/dt
-
-        dx_arr.append(x_dot)
-        dy_arr.append(y_dot)
 
         v_r = 0.5 * (v / k1 + omega / k2)
         v_l = 0.5 * (v / k1 - omega / k2)
@@ -202,11 +172,6 @@ if __name__ == '__main__':
         talker()
     except rospy.ROSInterruptException:
         pass
-    
-    plt.plot(dx_arr,dy_arr)
-    #plt.show()
-    plt.savefig('der.png')
-    plt.clf()
     
     plt.plot(x,y)
     plt.savefig('pos.png')
