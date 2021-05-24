@@ -47,6 +47,7 @@ y = []
 
 omega_arr = []
 phi_ref_arr = []
+phi_k_arr = []
 
 v_l_arr = []
 v_r_arr = []
@@ -66,7 +67,7 @@ def step(x_k, y_k, fi_k, dt, v, omega):
     return x_k, y_k, fi_k
  
 def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
-    global x,y, omega_arr, phi_ref_arr
+    global x, y, phi_k_arr, omega_arr, phi_ref_arr
  
     coeff = 1
     
@@ -79,6 +80,7 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, dt):
     
     x.append(x_k)
     y.append(y_k) 
+    phi_k_arr.append(fi_k)
     phi_ref_arr.append(fi_ref)
     omega_arr.append(omega)
 
@@ -154,7 +156,7 @@ def talker():
         v_l_arr.append(v_l)
         v_r_arr.append(v_r)
 
-        # я понял в чём проблема с вращением! ведь мы должны вращаться 
+        # я понял в чём проблема с вращением! ведь мы должны вращаться с какой-то своей скоростью, а вращаемся с другой... 
 
         if v_r <= 0:
                 v_r = 0
@@ -191,6 +193,10 @@ if __name__ == '__main__':
     
     plt.plot(phi_ref_arr)
     plt.savefig('fi_ref.png')
+    plt.clf()
+
+    plt.plot(phi_k_arr)
+    plt.savefig('fi_k.png')
     plt.clf()
 
     plt.plot(v_l_arr)
