@@ -135,11 +135,11 @@ def talker():
             else:
                 v = 1
 
-        if abs(x_k - x_ref) < eps and abs(y_k - y_ref) < eps: #and not achieved_destination:
+        if abs(x_k - x_ref) < eps and abs(y_k - y_ref) < eps:
             publish_str = "\n X: {:.5f}".format(x_k) + ' Y: ' + "{:.5f}".format(y_k) + ' Phi:' + "{:.5f}".format(phi_k)
             rospy.loginfo(publish_str)
 
-            curPoint+=1
+            curPoint += 1
             if curPoint == len(points):
                 achieved_destination = True
             if not achieved_destination:
@@ -153,6 +153,8 @@ def talker():
         v_r_arr.append(v_r)
 
         # я понял в чём проблема с вращением! ведь мы должны вращаться с какой-то своей скоростью, а вращаемся с другой... 
+        # как то по другому считать их?
+        
 
         if v_r <= 0:
                 v_r = 0
