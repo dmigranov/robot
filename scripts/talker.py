@@ -119,7 +119,8 @@ def talker():
     omega_const = k2 * (v_l_const)
 
     curPoint = 0
-    points = [(3, 3), (4, -2), (3, -3)]
+    #points = [(3, 3), (4, -2), (3, -3)]
+    points = [(0, 1), (1, 1), (1, 0), (0, 0)]
     
     x_ref = points[curPoint][0]
     y_ref = points[curPoint][1]
