@@ -66,7 +66,7 @@ def step(x_k, y_k, fi_k, dt, v, omega):
     fi_k = fi_k + omega * dt
     return x_k, y_k, fi_k
  
-def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, omega, dt):
+def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v_const, omega_const, dt):
     global x, y, phi_k_arr, omega_arr, phi_ref_arr
 
     phi_eps = 0.01
@@ -76,13 +76,22 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, omega, dt):
     dy = y_ref - y_k
     fi_ref = math.atan2(dx, dy)
 
+
     if abs(fi_k - fi_ref) < phi_eps:
         omega = 0
+        v = v_const
     else:
+        if fi_ref > fi_k:
+            omega = omega_const
+        else:
+            omega = -omega_const
         v = 0
 
     if abs(x_k - x_ref) < pos_eps and abs(y_k - y_ref) < pos_eps:
         v = 0
+
+    #publish_str = "\n v: {:.5f}".format(v) + ' omega: ' + "{:.5f}".format(omega)
+    #rospy.loginfo(publish_str)
 
     x_k, y_k, fi_k = step(x_k, y_k, fi_k, dt, v, omega)
     
@@ -92,15 +101,13 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, omega, dt):
     phi_ref_arr.append(fi_ref)
     omega_arr.append(omega)
 
-    return x_k, y_k, fi_k
+    return x_k, y_k, fi_k, v, omega
     
  
 def talker():
     global v_l_arr, v_r_arr
 
     eps = 1e-2
-    v = 1
-    omega = math.pi/2
     wheel_r = 0.02
     wheel_dist = 0.11
     
@@ -109,7 +116,7 @@ def talker():
 
     v_l_const = v_r_const = 2 * math.pi
     v_const = k1 * (v_l_const + v_r_const)
-    omega_const = k2 * (v_l_const - v_r_const)
+    omega_const = k2 * (v_l_const)
 
     curPoint = 0
     points = [(3, 3), (4, -2), (3, 3)]
@@ -139,10 +146,11 @@ def talker():
             right_wheel_pub.publish(0)
             break
 
-        x_k, y_k, phi_k = go_to_point(x_k, y_k, phi_k, x_ref, y_ref, v_const, omega_const, dt)
+        x_k, y_k, phi_k, v, omega = go_to_point(x_k, y_k, phi_k, x_ref, y_ref, v_const, omega_const, dt)
 
         #if curPoint < len(points):
-        
+        publish_str = "\n X: {:.5f}".format(x_k) + ' Y: ' + "{:.5f}".format(y_k) + ' Phi:' + "{:.5f}".format(phi_k)
+        rospy.loginfo(publish_str)
 
         if abs(x_k - x_ref) < eps and abs(y_k - y_ref) < eps:
             publish_str = "\n X: {:.5f}".format(x_k) + ' Y: ' + "{:.5f}".format(y_k) + ' Phi:' + "{:.5f}".format(phi_k)
@@ -155,8 +163,8 @@ def talker():
                 x_ref = points[curPoint][0]
                 y_ref = points[curPoint][1]
 
-        #v_r = 0.5 * (v / k1 + omega / k2)
-        #v_l = 0.5 * (v / k1 - omega / k2)
+        v_r = 0.5 * (v / k1 + omega / k2)
+        v_l = 0.5 * (v / k1 - omega / k2)
 
         v_l_arr.append(v_l)
         v_r_arr.append(v_r)
