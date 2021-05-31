@@ -119,7 +119,8 @@ def talker():
     omega_const = k2 * (v_l_const)
 
     curPoint = 0
-    points = [(3, 3), (4, -2), (3, 3)]
+    points = [(3, 3), (4, -2), (3, -3)]
+    
     x_ref = points[curPoint][0]
     y_ref = points[curPoint][1]
     
@@ -149,8 +150,8 @@ def talker():
         x_k, y_k, phi_k, v, omega = go_to_point(x_k, y_k, phi_k, x_ref, y_ref, v_const, omega_const, dt)
 
         #if curPoint < len(points):
-        publish_str = "\n X: {:.5f}".format(x_k) + ' Y: ' + "{:.5f}".format(y_k) + ' Phi:' + "{:.5f}".format(phi_k)
-        rospy.loginfo(publish_str)
+        #publish_str = "\n X: {:.5f}".format(x_k) + ' Y: ' + "{:.5f}".format(y_k) + ' Phi:' + "{:.5f}".format(phi_k)
+        #rospy.loginfo(publish_str)
 
         if abs(x_k - x_ref) < eps and abs(y_k - y_ref) < eps:
             publish_str = "\n X: {:.5f}".format(x_k) + ' Y: ' + "{:.5f}".format(y_k) + ' Phi:' + "{:.5f}".format(phi_k)
