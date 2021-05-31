@@ -70,16 +70,14 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, omega, dt):
     global x, y, phi_k_arr, omega_arr, phi_ref_arr
 
     phi_eps = 0.01
- 
-    coeff = 1
-    
+     
     dx = x_ref - x_k
     dy = y_ref - y_k
     fi_ref = math.atan2(dx, dy)
 
     if abs(fi_k - fi_ref) < phi_eps:
         omega = 0
-        
+
     x_k, y_k, fi_k = step(x_k, y_k, fi_k, dt, v, omega)
     
     x.append(x_k)
@@ -104,6 +102,8 @@ def talker():
     k2 = wheel_r/wheel_dist
 
     v_l_const = v_r_const = 2 * math.pi
+    v_const = k1 * (v_l_const + v_r_const)
+    omega_const = k2 * (v_l_const - v_r_const)
 
     curPoint = 0
     points = [(3, 3), (4, -2), (3, 3)]
