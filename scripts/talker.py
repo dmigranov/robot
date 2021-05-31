@@ -70,13 +70,19 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, omega, dt):
     global x, y, phi_k_arr, omega_arr, phi_ref_arr
 
     phi_eps = 0.01
-     
+    pos_eps = 0.01
+    
     dx = x_ref - x_k
     dy = y_ref - y_k
     fi_ref = math.atan2(dx, dy)
 
     if abs(fi_k - fi_ref) < phi_eps:
         omega = 0
+    else:
+        v = 0
+
+    if abs(x_k - x_ref) < pos_eps and abs(y_k - y_ref) < pos_eps:
+        v = 0
 
     x_k, y_k, fi_k = step(x_k, y_k, fi_k, dt, v, omega)
     
@@ -86,7 +92,7 @@ def go_to_point(x_k, y_k, fi_k, x_ref, y_ref, v, omega, dt):
     phi_ref_arr.append(fi_ref)
     omega_arr.append(omega)
 
-    return x_k, y_k, fi_k, omega
+    return x_k, y_k, fi_k
     
  
 def talker():
@@ -133,13 +139,10 @@ def talker():
             right_wheel_pub.publish(0)
             break
 
-        x_k, y_k, phi_k, omega = go_to_point(x_k, y_k, phi_k, x_ref, y_ref, v, dt)
+        x_k, y_k, phi_k = go_to_point(x_k, y_k, phi_k, x_ref, y_ref, v_const, omega_const, dt)
 
-        if curPoint < len(points):
-            if abs(omega) > eps:
-                v = 0
-            else:
-                v = 1
+        #if curPoint < len(points):
+        
 
         if abs(x_k - x_ref) < eps and abs(y_k - y_ref) < eps:
             publish_str = "\n X: {:.5f}".format(x_k) + ' Y: ' + "{:.5f}".format(y_k) + ' Phi:' + "{:.5f}".format(phi_k)
@@ -152,8 +155,8 @@ def talker():
                 x_ref = points[curPoint][0]
                 y_ref = points[curPoint][1]
 
-        v_r = 0.5 * (v / k1 + omega / k2)
-        v_l = 0.5 * (v / k1 - omega / k2)
+        #v_r = 0.5 * (v / k1 + omega / k2)
+        #v_l = 0.5 * (v / k1 - omega / k2)
 
         v_l_arr.append(v_l)
         v_r_arr.append(v_r)
